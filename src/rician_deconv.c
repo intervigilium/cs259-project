@@ -1,4 +1,5 @@
 #include "rician_deconv.h"
+#include "gaussian_blur.h"
 
 #define DEBLUR_EPSILON 0.0001
 #define DEBLUR_DT 1.0E-10
