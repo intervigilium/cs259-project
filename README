@@ -1,0 +1,12 @@
+CS 259
+UCLA Winter 2011
+Project
+
+This project is a high level description of an accelerator designed to
+accelerate several medical imaging applications. In particular, the
+functions to be accelerated include a rician deconvolution, gaussian blur,
+two-phase 3d operations for segmentation and EM-TV operations for compressive
+sensing.
+Rician Deconvolution accelerator functions can be shared between denoise and
+deblur imaging applications, and gaussian blur accelerator functions can be
+shared between deblur and registration imaging applications.
