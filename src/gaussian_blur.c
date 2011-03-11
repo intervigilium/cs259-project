@@ -10,6 +10,7 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 	double m_cache[M], n_cache[N], p_cache[P];
 	double r;
 	uint32_t steps, i, j, k;
+	uint32_t plane, col, row;
 
 	for (steps = 0; steps < 3 * GAUSSIAN_NUMSTEPS; steps++) {
 #pragma AP unroll
@@ -25,12 +26,12 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 		/* downward */
 		for (k = 0; k < P * N; k++) {
 #pragma AP pipeline
-			uint32_t plane = k / N;
-			uint32_t col = k % N;
+			plane = k / N;
+			col = k % N;
 			U(0, col, plane) *= BoundaryScale;
 		}
 		for (k = 0; k < P; k++) {
-			for (j = 0; i < N; j++) {
+			for (j = 0; j < N; j++) {
 #pragma AP pipeline
 				n_cache[j] = U(0, j, k);
 			}
@@ -47,8 +48,8 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 		/* upward */
 		for (k = 0; k < P * N; k++) {
 #pragma AP pipeline
-			uint32_t plane = k / N;
-			uint32_t col = k % N;
+			plane = k / N;
+			col = k % N;
 			U(M - 1, col, plane) *= BoundaryScale;
 		}
 		for (k = 0; k < P; k++) {
@@ -69,8 +70,8 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 		/* right */
 		for (k = 0; k < P * M; k++) {
 #pragma AP pipeline
-			uint32_t plane = k / M;
-			uint32_t row = k % M;
+			plane = k / M;
+			row = k % M;
 			U(row, 0, plane) *= BoundaryScale;
 		}
 		for (i = 0; i < M; i++) {
@@ -91,8 +92,8 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 		/* left */
 		for (k = 0; k < P * M; k++) {
 #pragma AP pipeline
-			uint32_t plane = k / M;
-			uint32_t row = k % M;
+			plane = k / M;
+			row = k % M;
 			U(row, N - 1, plane) *= BoundaryScale;
 		}
 		for (i = 0; i < M; i++) {
@@ -100,7 +101,7 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 #pragma AP pipeline
 				p_cache[k] = U(i, N - 1, k);
 			}
-			for (j = N - 2; j < N; j++) {
+			for (j = N - 2; j >= 0; j--) {
 				for (k = 0; k < P; k++) {
 #pragma AP pipeline
 					r = U(i, j, k) + nu * p_cache[k];
@@ -113,8 +114,8 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 		/* out */
 		for (j = 0; j < N * M; j++) {
 #pragma AP pipeline
-			uint32_t col = j / M;
-			uint32_t row = j % M;
+			col = j / M;
+			row = j % M;
 			U(row, col, 0) *= BoundaryScale;
 		}
 		for (j = 0; i < N; j++) {
@@ -135,8 +136,8 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 		/* in */
 		for (j = 0; j < N * M; j++) {
 #pragma AP pipeline
-			uint32_t col = j / M;
-			uint32_t row = j % M;
+			col = j / M;
+			row = j % M;
 			U(row, col, P - 1) *= BoundaryScale;
 		}
 		for (j = 0; j < N; j++) {
