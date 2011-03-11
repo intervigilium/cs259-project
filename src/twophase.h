@@ -9,9 +9,9 @@
 #define TP_LAMBDA2 1.0
 #define TP_EPSILON 10e-10
 
-#define CMP(a,b,c) (curvature_motion_part[a+b*N+c*N*M])
-#define PHI(a,b,c) (phi[a+b*N+c*N*M])
-#define U(a,b,c) (u0[a+b*N+c*N*M])
+#define CMP(a,b,c) (curvature_motion_part[(a)+(b)*M+(c)*N*M])
+#define PHI(a,b,c) (phi[(a)+(b)*M+(c)*N*M])
+#define U0(a,b,c) (u0[(a)+(b)*M+(c)*N*M])
 
 void two_phase_3d_op_explicit(double phi[M * N * P], const double u0[M * N * P],
 			      double curvature_motion_part[M * N * P],

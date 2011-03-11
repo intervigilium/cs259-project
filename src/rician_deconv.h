@@ -11,8 +11,8 @@
 #define DENOISE_DT 1.0E-20
 #define DENOISE_ITERATIONS 500
 
-#define U(a,b,c) (u[a+b*N+c*M*N])
-#define G(a,b,c) (g[a+b*N+c*M*N])
+#define U(a,b,c) (u[(a)+(b)*N+(c)*M*N])
+#define G(a,b,c) (g[(a)+(b)*N+(c)*M*N])
 
 #define U_CENTER U(i,j,k)
 #define U_LEFT U(i,j-1,k)
