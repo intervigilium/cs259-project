@@ -1,3 +1,6 @@
+#ifndef _COMMON_H
+#define _COMMON_H
+
 #include <autopilot_tech.h>
 
 #define uint2_t uint2
@@ -15,3 +18,5 @@ double q3_sqrt(double num);
 double fast_fabs(double num);
 
 void array_copy(const double src[M*N*P], double dst[M*N*P]);
+
+#endif

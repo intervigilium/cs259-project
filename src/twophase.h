@@ -1,3 +1,6 @@
+#ifndef _TWOPHASE_H
+#define _TWOPHASE_H
+
 #include "common.h"
 
 #define TP_MU 11704.5
@@ -13,3 +16,5 @@
 void two_phase_3d_op_explicit(double phi[M][N][P], const double u0[M][N][P],
 			      double curvature_motion_part[M][N][P], double dt,
 			      double c1, double c2);
+
+#endif
