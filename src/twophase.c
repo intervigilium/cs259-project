@@ -174,9 +174,10 @@ void two_phase_3d_op_explicit(double phi[M * N * P],
 				    Grad * (mu * K +
 					    lambda1 * (U0(i, j, k) -
 						       c1) * (U0(i, j,
-								k) - c1) -
+								 k) - c1) -
 					    lambda2 * (U0(i, j, k) -
-						       c2) * (U0(i, j, k) - c2));
+						       c2) * (U0(i, j,
+								 k) - c2));
 			}
 		}
 	}

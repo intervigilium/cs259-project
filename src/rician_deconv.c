@@ -97,8 +97,8 @@ static inline void semi_implicit_update(double u[M * N * P],
 }
 
 void rician_deconv_deblur(double u[M * N * P], double f[M * N * P],
-		   double g[M * N * P], double conv[M * N * P],
-		   double Ksigma, double sigma, double lambda)
+			  double g[M * N * P], double conv[M * N * P],
+			  double Ksigma, double sigma, double lambda)
 {
 	double sigma2, gamma, r;
 	double numer, denom;
@@ -132,8 +132,7 @@ void rician_deconv_deblur(double u[M * N * P], double f[M * N * P],
 }
 
 void rician_deconv_denoise(double u[M * N * P], double f[M * N * P],
-		   double g[M * N * P],
-		   double sigma, double lambda)
+			   double g[M * N * P], double sigma, double lambda)
 {
 	double sigma2, gamma, r;
 	double numer, denom;

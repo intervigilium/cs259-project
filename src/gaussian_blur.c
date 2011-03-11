@@ -57,9 +57,9 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 #pragma AP pipeline
 				n_cache[j] = U(M - 1, j, k);
 			}
-			for (i = 0; i < M-1; i++) {
+			for (i = 0; i < M - 1; i++) {
 				/* retarded autopilot cant count backwards */
-				idx = M-2 - i;
+				idx = M - 2 - i;
 				for (j = 0; j < N; j++) {
 #pragma AP pipeline
 					r = U(idx, j, k) + nu * n_cache[j];
@@ -104,7 +104,7 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 				p_cache[k] = U(i, N - 1, k);
 			}
 			for (j = 0; j < N - 1; j++) {
-				idx = N-2 - j;
+				idx = N - 2 - j;
 				for (k = 0; k < P; k++) {
 #pragma AP pipeline
 					r = U(i, idx, k) + nu * p_cache[k];
@@ -148,8 +148,8 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 #pragma AP pipeline
 				m_cache[i] = U(i, j, P - 1);
 			}
-			for (k = 0; k < P-1; k++) {
-				idx = P-2 - k;
+			for (k = 0; k < P - 1; k++) {
+				idx = P - 2 - k;
 				for (i = 0; i < M; i++) {
 #pragma AP pipeline
 					r = U(i, j, idx) + nu * m_cache[i];
