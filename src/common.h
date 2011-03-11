@@ -17,6 +17,6 @@ double q3_sqrt(double num);
 
 double fast_fabs(double num);
 
-void array_copy(const double src[M*N*P], double dst[M*N*P]);
+void array_copy(const double src[M * N * P], double dst[M * N * P]);
 
 #endif

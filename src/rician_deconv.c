@@ -7,7 +7,7 @@ static inline void gradient(const double u[M * N * P], double g[M * N * P],
 	uint32_t i, j, k;
 	double u_stencil_up, u_stencil_center, u_stencil_down;
 	double numer, denom;
-	
+
 	/* approximate g = 1/|grad u| */
 	for (k = 1; k < P - 1; k++) {
 		for (j = 1; j < N - 1; j++) {
@@ -51,7 +51,8 @@ static inline void cubic_approx(const double u[M * N * P], double f[M * N * P],
 
 static inline void semi_implicit_update(double u[M * N * P],
 					const double g[M * N * P],
-					const double f[M * N * P], double dt, double gamma)
+					const double f[M * N * P], double dt,
+					double gamma)
 {
 	uint32_t i, j, k;
 	double numer, denom;

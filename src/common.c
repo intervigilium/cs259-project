@@ -24,10 +24,10 @@ double fast_fabs(double num)
 	return num;
 }
 
-void array_copy(const double src[M*N*P], double dst[M*N*P])
+void array_copy(const double src[M * N * P], double dst[M * N * P])
 {
 	uint32_t i;
-	for (i = 0; i < M*N*P; i++) {
+	for (i = 0; i < M * N * P; i++) {
 #pragma AP pipeline
 		dst[i] = src[i];
 	}
