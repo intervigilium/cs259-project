@@ -30,7 +30,7 @@
 #define G_IN G(i,j,k-1)
 #define G_OUT G(i,j,k+1)
 
-void rician_deconv(double u[M * N * P], const double f[M * N * P],
+void rician_deconv(double u[M * N * P], double f[M * N * P],
 		   double g[M * N * P], double conv[M * N * P], double Ksigma,
 		   double sigma, double lambda, uint2_t deblur);
 

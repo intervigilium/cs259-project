@@ -9,7 +9,7 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 	double PostScale = 1;
 	double m_cache[M], n_cache[N], p_cache[P];
 	double r;
-	int steps, i, j, k;
+	uint32_t steps, i, j, k;
 
 	for (steps = 0; steps < 3 * GAUSSIAN_NUMSTEPS; steps++) {
 #pragma AP unroll
@@ -25,8 +25,8 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 		/* downward */
 		for (k = 0; k < P * N; k++) {
 #pragma AP pipeline
-			int plane = k / N;
-			int col = k % N;
+			uint32_t plane = k / N;
+			uint32_t col = k % N;
 			U(0, col, plane) *= BoundaryScale;
 		}
 		for (k = 0; k < P; k++) {
@@ -47,8 +47,8 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 		/* upward */
 		for (k = 0; k < P * N; k++) {
 #pragma AP pipeline
-			int plane = k / N;
-			int col = k % N;
+			uint32_t plane = k / N;
+			uint32_t col = k % N;
 			U(M - 1, col, plane) *= BoundaryScale;
 		}
 		for (k = 0; k < P; k++) {
@@ -69,8 +69,8 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 		/* right */
 		for (k = 0; k < P * M; k++) {
 #pragma AP pipeline
-			int plane = k / M;
-			int row = k % M;
+			uint32_t plane = k / M;
+			uint32_t row = k % M;
 			U(row, 0, plane) *= BoundaryScale;
 		}
 		for (i = 0; i < M; i++) {
@@ -91,8 +91,8 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 		/* left */
 		for (k = 0; k < P * M; k++) {
 #pragma AP pipeline
-			int plane = k / M;
-			int row = k % M;
+			uint32_t plane = k / M;
+			uint32_t row = k % M;
 			U(row, N - 1, plane) *= BoundaryScale;
 		}
 		for (i = 0; i < M; i++) {
@@ -113,8 +113,8 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 		/* out */
 		for (j = 0; j < N * M; j++) {
 #pragma AP pipeline
-			int col = j / M;
-			int row = j % M;
+			uint32_t col = j / M;
+			uint32_t row = j % M;
 			U(row, col, 0) *= BoundaryScale;
 		}
 		for (j = 0; i < N; j++) {
@@ -135,8 +135,8 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 		/* in */
 		for (j = 0; j < N * M; j++) {
 #pragma AP pipeline
-			int col = j / M;
-			int row = j % M;
+			uint32_t col = j / M;
+			uint32_t row = j % M;
 			U(row, col, P - 1) *= BoundaryScale;
 		}
 		for (j = 0; j < N; j++) {

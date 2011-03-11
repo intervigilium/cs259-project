@@ -4,8 +4,10 @@
 static inline void gradient(const double u[M * N * P], double g[M * N * P],
 			    double epsilon)
 {
-	int i, j, k;
+	uint32_t i, j, k;
 	double u_stencil_up, u_stencil_center, u_stencil_down;
+	double numer, denom;
+	
 	/* approximate g = 1/|grad u| */
 	for (k = 1; k < P - 1; k++) {
 		for (j = 1; j < N - 1; j++) {
@@ -36,8 +38,8 @@ static inline void gradient(const double u[M * N * P], double g[M * N * P],
 static inline void cubic_approx(const double u[M * N * P], double f[M * N * P],
 				double sigma2)
 {
-	int i;
-	double r;
+	uint32_t i;
+	double r, numer, denom;
 	for (i = 0; i < M * N * P; i++) {
 #pragma pipeline
 		r = u[i] * f[i] / sigma2;
@@ -49,9 +51,10 @@ static inline void cubic_approx(const double u[M * N * P], double f[M * N * P],
 
 static inline void semi_implicit_update(double u[M * N * P],
 					const double g[M * N * P],
-					const double f[M * N * P], double dt)
+					const double f[M * N * P], double dt, double gamma)
 {
-	int i, j, k;
+	uint32_t i, j, k;
+	double numer, denom;
 	double u_stencil_up, u_stencil_center, u_stencil_down;
 	double g_stencil_up, g_stencil_center, g_stencil_down;
 
@@ -101,8 +104,8 @@ void rician_deconv(double u[M * N * P], double f[M * N * P],
 	double u_stencil_up, u_stencil_center, u_stencil_down;
 	double g_stencil_up, g_stencil_center, g_stencil_down;
 	double epsilon, dt;
-	int i, j, k;
-	int max_iterations, iteration;
+	uint32_t i, j, k;
+	uint32_t max_iterations, iteration;
 
 	/* Initializations */
 	sigma2 = SQR(sigma);
@@ -132,9 +135,9 @@ void rician_deconv(double u[M * N * P], double f[M * N * P],
 				conv[i] -= f[i];
 			}
 			gaussian_blur(conv, Ksigma);
-			semi_implicit_update(u, g, conv, dt);
+			semi_implicit_update(u, g, conv, dt, gamma);
 		} else {
-			semi_implicit_update(u, g, f, dt);
+			semi_implicit_update(u, g, f, dt, gamma);
 		}
 	}
 }

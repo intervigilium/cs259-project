@@ -2,6 +2,7 @@
 
 static inline void neumann_bc(double curvature_motion_part[M * N * P])
 {
+	uint32_t i, j, k;
 	for (j = 0; j < N; j++) {
 		for (k = 0; k < P; k++) {
 			CMP(0, j, k) = CMP(1, j, k);
@@ -64,7 +65,7 @@ void two_phase_3d_op_explicit(double phi[M * N * P],
 	double stencil[3][3][3];
 	double numer, denom;
 
-	int i, j, k, l;
+	uint32_t i, j, k, l;
 
 	for (i = 1; i < M - 1; i++) {
 		for (j = 1; j < N - 1; j++) {

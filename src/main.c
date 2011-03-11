@@ -3,7 +3,7 @@
 #include "rician_deconv.h"
 #include "twophase.h"
 
-void main(double u1[M * N * P], double u2[M * N * P], double u3[M * N * P],
+int main(double u1[M * N * P], double u2[M * N * P], double u3[M * N * P],
 	  double u4[M * N * P], double in1, double in2, double in3)
 {
 	/* for deblur */
@@ -27,4 +27,6 @@ void main(double u1[M * N * P], double u2[M * N * P], double u3[M * N * P],
     /*
     two_phase_3d_op_explicit(u1, u2, u3, in1, in2, in3);
     */
+	
+	return 0;
 }

@@ -26,7 +26,7 @@ double fast_fabs(double num)
 
 void array_copy(const double src[M*N*P], double dst[M*N*P])
 {
-	int i;
+	uint32_t i;
 	for (i = 0; i < M*N*P; i++) {
 #pragma AP pipeline
 		dst[i] = src[i];
