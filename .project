@@ -14,36 +14,36 @@
 					<value>all</value>
 				</dictionary>
 				<dictionary>
-					<key>?name?</key>
-					<value></value>
+					<key>org.eclipse.cdt.make.core.buildLocation</key>
+					<value>${workspace_loc:/cs259-project/Debug}</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.enableAutoBuild</key>
 					<value>false</value>
 				</dictionary>
 				<dictionary>
-					<key>org.eclipse.cdt.make.core.buildLocation</key>
-					<value>${workspace_loc:/cs259-project/Debug}</value>
-				</dictionary>
-				<dictionary>
-					<key>org.eclipse.cdt.make.core.enableFullBuild</key>
-					<value>true</value>
+					<key>?name?</key>
+					<value></value>
 				</dictionary>
 				<dictionary>
 					<key>?children?</key>
 					<value>?name?=outputEntries\|?children?=?name?=entry\\\\\\\\\\\\\\\|\\\\\\\|?name?=entry\\\\\\\\\\\\\\\|\\\\\\\|\||</value>
 				</dictionary>
 				<dictionary>
+					<key>org.eclipse.cdt.make.core.enableFullBuild</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
 					<key>org.eclipse.cdt.make.core.enableCleanBuild</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.append_environment</key>
 					<value>true</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.cleanBuildTarget</key>
 					<value>clean</value>
-				</dictionary>
-				<dictionary>
-					<key>org.eclipse.cdt.make.core.append_environment</key>
-					<value>true</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.contents</key>
@@ -72,6 +72,11 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
+			<name>com.autoesl.autopilot.ui.AutopilotBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
 			<name>org.eclipse.cdt.managedbuilder.core.ScannerConfigBuilder</name>
 			<arguments>
 			</arguments>
@@ -79,7 +84,9 @@
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.cdt.core.cnature</nature>
+		<nature>com.autoesl.autopilot.ui.AutopilotNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
+		<nature>org.eclipse.cdt.core.ccnature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 	</natures>
 	<linkedResources>
@@ -87,16 +94,6 @@
 			<name>virtex6/constraints/directives.tcl</name>
 			<type>1</type>
 			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/virtex6/directives.tcl</location>
-		</link>
-		<link>
-			<name>virtex6/constraints/script.tcl</name>
-			<type>1</type>
-			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/virtex6/script.tcl</location>
-		</link>
-		<link>
-			<name>source/rician_deconv.c</name>
-			<type>1</type>
-			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/rician_deconv.c</location>
 		</link>
 		<link>
 			<name>source/main.c</name>
@@ -109,9 +106,9 @@
 			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/.apc/.tb</location>
 		</link>
 		<link>
-			<name>virtex6/constraints</name>
-			<type>2</type>
-			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/virtex6/.tcls</location>
+			<name>source/twophase.h</name>
+			<type>1</type>
+			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/twophase.h</location>
 		</link>
 		<link>
 			<name>source</name>
@@ -127,6 +124,46 @@
 			<name>source/gaussian_blur.c</name>
 			<type>1</type>
 			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/gaussian_blur.c</location>
+		</link>
+		<link>
+			<name>source/common.h</name>
+			<type>1</type>
+			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/common.h</location>
+		</link>
+		<link>
+			<name>source/common.c</name>
+			<type>1</type>
+			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/common.c</location>
+		</link>
+		<link>
+			<name>virtex6/constraints/script.tcl</name>
+			<type>1</type>
+			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/virtex6/script.tcl</location>
+		</link>
+		<link>
+			<name>source/rician_deconv.c</name>
+			<type>1</type>
+			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/rician_deconv.c</location>
+		</link>
+		<link>
+			<name>source/gaussian_blur.h</name>
+			<type>1</type>
+			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/gaussian_blur.h</location>
+		</link>
+		<link>
+			<name>source/twophase.c</name>
+			<type>1</type>
+			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/twophase.c</location>
+		</link>
+		<link>
+			<name>virtex6/constraints</name>
+			<type>2</type>
+			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/virtex6/.tcls</location>
+		</link>
+		<link>
+			<name>source/rician_deconv.h</name>
+			<type>1</type>
+			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/rician_deconv.h</location>
 		</link>
 	</linkedResources>
 </projectDescription>
