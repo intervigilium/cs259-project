@@ -5,6 +5,7 @@ static inline void neumann_bc(double curvature_motion_part[M * N * P])
 	uint32_t i, j, k;
 	for (j = 0; j < N; j++) {
 		for (k = 0; k < P; k++) {
+#pragma AP pipeline
 			CMP(0, j, k) = CMP(1, j, k);
 			CMP(M - 1, j, k) = CMP(M - 2, j, k);
 		}
@@ -12,6 +13,7 @@ static inline void neumann_bc(double curvature_motion_part[M * N * P])
 
 	for (i = 0; i < M; i++) {
 		for (k = 0; k < P; k++) {
+#pragma AP pipeline
 			CMP(i, 0, k) = CMP(i, 1, k);
 			CMP(i, N - 1, k) = CMP(i, N - 2, k);
 		}
@@ -19,6 +21,7 @@ static inline void neumann_bc(double curvature_motion_part[M * N * P])
 
 	for (i = 0; i < M; i++) {
 		for (j = 0; j < N; j++) {
+#pragma AP pipeline
 			CMP(i, j, 0) = CMP(i, j, 1);
 			CMP(i, j, P - 1) = CMP(i, j, P - 2);
 		}
@@ -63,6 +66,8 @@ void two_phase_3d_op_explicit(double phi[M * N * P],
 	double Grad, K;
 
 	double stencil[3][3][3];
+#pragma AP array_partition variable=stencil complete dim=0
+
 	double numer, denom;
 
 	uint32_t i, j, k, l;
@@ -70,7 +75,6 @@ void two_phase_3d_op_explicit(double phi[M * N * P],
 	for (i = 1; i < M - 1; i++) {
 		for (j = 1; j < N - 1; j++) {
 			for (k = 1; k < P - 1; k++) {
-
 				/* stencil code */
 				stencil[0][0][0] = stencil[0][0][1];
 				stencil[0][1][0] = stencil[0][1][1];
@@ -151,6 +155,7 @@ void two_phase_3d_op_explicit(double phi[M * N * P],
 
 				/* denom = denom^1.5 */
 				for (l = 0; l < 3; l++) {
+#pragma AP unroll
 					denom *= denom;
 				}
 				q3_sqrt(denom);
@@ -179,8 +184,8 @@ void two_phase_3d_op_explicit(double phi[M * N * P],
 	/* NeumannBC functionality inlined, pipeline this */
 	neumann_bc(curvature_motion_part);
 
-	/* pipeline this */
 	for (i = 0; i < M * N * P; i++) {
+#pragma AP pipeline
 		phi[i] += curvature_motion_part[i] * dt;
 	}
 }
