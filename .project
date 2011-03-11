@@ -101,6 +101,11 @@
 			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/main.c</location>
 		</link>
 		<link>
+			<name>source/emtv3d.c</name>
+			<type>1</type>
+			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/emtv3d.c</location>
+		</link>
+		<link>
 			<name>test bench</name>
 			<type>2</type>
 			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/.apc/.tb</location>
