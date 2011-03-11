@@ -167,11 +167,11 @@ void two_phase_3d_op_explicit(double phi[M * N * P],
 
 				CMP(i, j, k) =
 				    Grad * (mu * K +
-					    lambda1 * (U(i, j, k) -
-						       c1) * (U(i, j,
+					    lambda1 * (U0(i, j, k) -
+						       c1) * (U0(i, j,
 								k) - c1) -
-					    lambda2 * (U(i, j, k) -
-						       c2) * (U(i, j, k) - c2));
+					    lambda2 * (U0(i, j, k) -
+						       c2) * (U0(i, j, k) - c2));
 			}
 		}
 	}
