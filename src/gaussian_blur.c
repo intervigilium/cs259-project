@@ -39,7 +39,7 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 #pragma AP pipeline
 					r = U(i, j, k) + nu * n_cache[j];
 					U(i, j, k) = r;
-					n_cache[i] = r;
+					n_cache[j] = r;
 				}
 			}
 		}
