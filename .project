@@ -106,11 +106,6 @@
 			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/.apc/.tb</location>
 		</link>
 		<link>
-			<name>source/twophase.h</name>
-			<type>1</type>
-			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/twophase.h</location>
-		</link>
-		<link>
 			<name>source</name>
 			<type>2</type>
 			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/.apc/.src</location>
@@ -124,11 +119,6 @@
 			<name>source/gaussian_blur.c</name>
 			<type>1</type>
 			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/gaussian_blur.c</location>
-		</link>
-		<link>
-			<name>source/common.h</name>
-			<type>1</type>
-			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/common.h</location>
 		</link>
 		<link>
 			<name>source/common.c</name>
@@ -146,11 +136,6 @@
 			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/rician_deconv.c</location>
 		</link>
 		<link>
-			<name>source/gaussian_blur.h</name>
-			<type>1</type>
-			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/gaussian_blur.h</location>
-		</link>
-		<link>
 			<name>source/twophase.c</name>
 			<type>1</type>
 			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/twophase.c</location>
@@ -159,11 +144,6 @@
 			<name>virtex6/constraints</name>
 			<type>2</type>
 			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/virtex6/.tcls</location>
-		</link>
-		<link>
-			<name>source/rician_deconv.h</name>
-			<type>1</type>
-			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/rician_deconv.h</location>
 		</link>
 	</linkedResources>
 </projectDescription>
