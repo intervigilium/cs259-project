@@ -1,8 +1,8 @@
 #include "gaussian_blur.h"
 #include "rician_deconv.h"
 
-void main(double u1[M][N][P], double u2[M][N][P], double u3[M][N][P],
-	  double u4[M][N][P], double Ksigma, double sigma, double lambda)
+void main(double u1[M * N * P], double u2[M * N * P], double u3[M * N * P],
+	  double u4[M * N * P], double Ksigma, double sigma, double lambda)
 {
 	/* for deblur */
 	/*
@@ -20,4 +20,9 @@ void main(double u1[M][N][P], double u2[M][N][P], double u3[M][N][P],
 	   gaussian_blur(u2, Ksigma);
 	   gaussian_blur(u3, Ksigma);
 	 */
+
+    /* for segmentation */
+    /*
+
+    */
 }
