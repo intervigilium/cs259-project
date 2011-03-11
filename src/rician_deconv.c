@@ -1,14 +1,6 @@
 #include "rician_deconv.h"
 #include "gaussian_blur.h"
 
-#define DEBLUR_EPSILON 0.0001
-#define DEBLUR_DT 1.0E-10
-#define DEBLUR_ITERATIONS 10
-
-#define DENOISE_EPSILON 5.0
-#define DENOISE_DT 1.0E-20
-#define DENOISE_ITERATIONS 500
-
 static inline void gradient(const double u[M * N * P], double g[M * N * P],
 			    double epsilon)
 {
