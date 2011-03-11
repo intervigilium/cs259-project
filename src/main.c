@@ -12,10 +12,10 @@ int main(double u1[M * N * P], double u2[M * N * P], double u3[M * N * P],
 #pragma AP interface ap_bus port=u4 pipeline
 	if (select == 0) {
 		/* for deblur */
-		rician_deconv(u1, u2, u3, u4, in1, in2, in3, 1);
+		rician_deconv_deblur(u1, u2, u3, u4, in1, in2, in3);
 	} else if (select == 1) {
 		/* for denoise */
-		rician_deconv(u1, u2, u3, u4, in1, in2, in3, 0);
+		rician_deconv_denoise(u1, u2, u3, in1, in2);
 	} else if (select == 2) {
 		/* for registration */
 		gaussian_blur(u1, in1);
