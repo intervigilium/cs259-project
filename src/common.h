@@ -11,11 +11,19 @@
 #define N 60
 #define P 60
 
+#define PI 3.14159265
+
 #define SQR(x) ((x)*(x))
+#define MIN(x, y) (((x) < (y)) ? (x) : (y))
+#define MAX(x, y) (((x) > (y)) ? (x) : (y))
 
 double q3_sqrt(double num);
 
 double fast_fabs(double num);
+
+double fast_sin(double num);
+
+double fast_cos(double num);
 
 void array_copy(const double src[M * N * P], double dst[M * N * P]);
 
