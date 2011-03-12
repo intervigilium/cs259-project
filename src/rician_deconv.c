@@ -36,7 +36,7 @@ static inline void gradient(const double u[M * N * P], double g[M * N * P],
 	}
 }
 
-static inline double cubic_approx(const double u, double f, double sigma2)
+static inline double cubic_approx(double u, double f, double sigma2)
 {
 	double r, numer, denom;
 
