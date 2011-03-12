@@ -96,36 +96,6 @@
 			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/virtex6/directives.tcl</location>
 		</link>
 		<link>
-			<name>source/main.c</name>
-			<type>1</type>
-			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/main.c</location>
-		</link>
-		<link>
-			<name>source/emtv3d.c</name>
-			<type>1</type>
-			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/emtv3d.c</location>
-		</link>
-		<link>
-			<name>test bench</name>
-			<type>2</type>
-			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/.apc/.tb</location>
-		</link>
-		<link>
-			<name>source</name>
-			<type>2</type>
-			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/.apc/.src</location>
-		</link>
-		<link>
-			<name>virtex6/constraints/.xml.directive</name>
-			<type>1</type>
-			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/virtex6/virtex6.directive</location>
-		</link>
-		<link>
-			<name>source/gaussian_blur.c</name>
-			<type>1</type>
-			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/gaussian_blur.c</location>
-		</link>
-		<link>
 			<name>source/common.c</name>
 			<type>1</type>
 			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/common.c</location>
@@ -141,14 +111,44 @@
 			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/rician_deconv.c</location>
 		</link>
 		<link>
+			<name>source/main.c</name>
+			<type>1</type>
+			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/main.c</location>
+		</link>
+		<link>
 			<name>source/twophase.c</name>
 			<type>1</type>
 			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/twophase.c</location>
 		</link>
 		<link>
+			<name>source/emtv3d.c</name>
+			<type>1</type>
+			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/emtv3d.c</location>
+		</link>
+		<link>
+			<name>test bench</name>
+			<type>2</type>
+			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/.apc/.tb</location>
+		</link>
+		<link>
 			<name>virtex6/constraints</name>
 			<type>2</type>
 			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/virtex6/.tcls</location>
+		</link>
+		<link>
+			<name>source</name>
+			<type>2</type>
+			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/.apc/.src</location>
+		</link>
+		<link>
+			<name>virtex6/constraints/.xml.directive</name>
+			<type>1</type>
+			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/virtex6/virtex6.directive</location>
+		</link>
+		<link>
+			<name>source/gaussian_blur.c</name>
+			<type>1</type>
+			<location>/space/cs259W11_group4/CS259/ethanc/cs259-project/src/gaussian_blur.c</location>
 		</link>
 	</linkedResources>
 </projectDescription>
