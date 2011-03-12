@@ -59,7 +59,10 @@ static inline uint2_t semi_implicit_convergence(double u[M * N * P],
 	double u_stencil_up, u_stencil_center, u_stencil_down;
 	double g_stencil_up, g_stencil_center, g_stencil_down;
 	double g_left_cache[M], g_right_cache[M], g_in_cache[M], g_out_cache[M];
+	double left_mul_cache[M], right_mul_cache, in_mul_cache[M],
+	    out_mul_cache[M];
 	double u_res_cache[M];
+	double f_center;
 
 	/* Update u by a semi-implict step */
 	for (k = 1; k < P - 1; k++) {
@@ -70,6 +73,14 @@ static inline uint2_t semi_implicit_convergence(double u[M * N * P],
 				g_right_cache[i] = G(1, j + 1, k);
 				g_in_cache[i] = G(1, j, k - 1);
 				g_out_cache[i] = G(1, j, k + 1);
+				left_mul_cache[i] =
+				    g_left_cache[i] * U(1, j - 1, k);
+				right_mul_cache[i] =
+				    g_right_cache[i] * U(1, j + 1, k);
+				in_mul_cache[i] =
+				    g_in_cache[i] * U(1, j, k - 1);
+				out_mul_cache[i] =
+				    g_in_cache[i] * U(1, j, k + 1);
 			}
 			u_stencil_center = U(0, j, k);
 			g_stencil_center = U(0, j, k);
@@ -84,18 +95,17 @@ static inline uint2_t semi_implicit_convergence(double u[M * N * P],
 				u_stencil_down = U_DOWN;
 				g_stencil_down = G_DOWN;
 
-				r = cubic_approx(u_stencil_center, F(i, j, k),
+				f_center = F(i, j, k);
+				r = cubic_approx(u_stencil_center, f_center,
 						 sigma2);
 				numer =
 				    u_stencil_center +
-				    dt * (U_RIGHT * g_right_cache[i] +
-					  U_LEFT * g_left_cache[i] +
+				    dt * (right_mul_cache[i] +
+					  left_mul_cache[i] +
 					  u_stencil_up * g_stencil_up +
 					  u_stencil_down * g_stencil_down +
-					  U_IN * g_in_cache[i] +
-					  U_OUT * g_out_cache[i] - gamma * F(i,
-									     j,
-									     k));
+					  in_mul_cache[i] +
+					  out_mul_cache[i] - gamma * f_center);
 				denom =
 				    1.0 + dt * (g_right_cache[i] +
 						g_left_cache[i] +
@@ -103,14 +113,14 @@ static inline uint2_t semi_implicit_convergence(double u[M * N * P],
 						g_in_cache[i] + g_out_cache[i]);
 				u_stencil_center = numer / denom;
 
-//				if (fast_fabs(u_last - u_stencil_center) <=
-//				    DENOISE_TOLERANCE) {
-//					return 1;
-//				}
-//				U_CENTER = u_stencil_center;
+//                              if (fast_fabs(u_last - u_stencil_center) <=
+//                                  DENOISE_TOLERANCE) {
+//                                      return 1;
+//                              }
+//                              U_CENTER = u_stencil_center;
 				u_res_cache[i] = u_stencil_center;
 			}
-			for (i = 1; i < M-1; i++) {
+			for (i = 1; i < M - 1; i++) {
 #pragma AP pipeline
 				U_CENTER = u_res_cache[i];
 			}
@@ -223,8 +233,8 @@ void rician_deconv_denoise(double u[M * N * P], double f[M * N * P],
 		converged =
 		    semi_implicit_convergence(u, g, f, DENOISE_DT, gamma,
 					      sigma);
-//		if (converged) {
-//			return;
-//		}
+//              if (converged) {
+//                      return;
+//              }
 	}
 }
