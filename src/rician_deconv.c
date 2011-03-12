@@ -203,6 +203,7 @@ void rician_deconv_deblur(double u[M * N * P], double f[M * N * P],
 		/* Approximate g = 1/|grad u| */
 		gradient(u, g, DEBLUR_EPSILON);
 		array_copy(u, conv);
+		gaussian_blur(conv, Ksigma);
 
 		/* calculate with rational cubic approx */
 		for (i = 0; i < M * N * P; i++) {
