@@ -56,8 +56,8 @@ static inline double raytracer_forward(double src_x, double src_y, double src_z,
 			 MAX(MIN
 			     (LAMBDA_Y(0, src_y, det_y, ray_len),
 			      LAMBDA_Y(N, src_y, det_y, ray_len)),
-			      MIN(LAMBDA_Z(0, src_z, det_z, ray_len),
-				  LAMBDA_Z(P, src_z, det_z, ray_len))
+			     MIN(LAMBDA_Z(0, src_z, det_z, ray_len),
+				 LAMBDA_Z(P, src_z, det_z, ray_len))
 			 )
 	    );
 
