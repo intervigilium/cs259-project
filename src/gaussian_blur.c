@@ -121,7 +121,7 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 			row = j % M;
 			U(row, col, 0) *= BoundaryScale;
 		}
-		for (j = 0; i < N; j++) {
+		for (j = 0; j < N; j++) {
 			for (i = 0; i < M; i++) {
 #pragma AP pipeline
 				m_cache[i] = U(i, j, 0);
