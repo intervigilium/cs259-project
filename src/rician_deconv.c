@@ -117,7 +117,6 @@ static inline uint2_t semi_implicit_convergence(double u[M * N * P],
 //                                  DENOISE_TOLERANCE) {
 //                                      return 1;
 //                              }
-//                              U_CENTER = u_stencil_center;
 				u_res_cache[i] = u_stencil_center;
 			}
 			for (i = 1; i < M - 1; i++) {
