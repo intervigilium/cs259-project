@@ -205,8 +205,7 @@ void rician_deconv_deblur(double u[M * N * P], double f[M * N * P],
 		/* calculate with rational cubic approx */
 		for (i = 0; i < M * N * P; i++) {
 #pragma AP pipeline
-			f[i] = cubic_approx(u[i], f[i], sigma2);
-			conv[i] -= f[i];
+			conv[i] -= cubic_approx(u[i], f[i], sigma2);
 		}
 		gaussian_blur(conv, Ksigma);
 		semi_implicit_update(u, g, conv, DEBLUR_DT, gamma);
