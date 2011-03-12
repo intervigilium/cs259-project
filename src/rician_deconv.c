@@ -59,7 +59,7 @@ static inline uint2_t semi_implicit_convergence(double u[M * N * P],
 	double u_stencil_up, u_stencil_center, u_stencil_down;
 	double g_stencil_up, g_stencil_center, g_stencil_down;
 	double g_left_cache[M], g_right_cache[M], g_in_cache[M], g_out_cache[M];
-	double left_mul_cache[M], right_mul_cache, in_mul_cache[M],
+	double left_mul_cache[M], right_mul_cache[M], in_mul_cache[M],
 	    out_mul_cache[M];
 	double u_res_cache[M];
 	double f_center;
