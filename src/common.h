@@ -7,9 +7,9 @@
 #define uint32_t uint32
 #define uint64_t uint64
 
-#define M 60
-#define N 60
-#define P 60
+#define M 181
+#define N 217
+#define P 181
 
 #define PI 3.14159265
 
