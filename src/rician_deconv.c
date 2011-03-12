@@ -40,9 +40,11 @@ static inline double cubic_approx(const double u, double f, double sigma2)
 {
 	double r, numer, denom;
 
-	r = u * f / sigma2;
+	r = u * f;
+	r = r / sigma2;
 	numer = r * 2.38944 + r * (0.950037 + r);
 	denom = 4.65314 + r * (2.57541 + r * (1.48937 + r));
+	r = numer / denom;
 	return f * r;
 
 }
@@ -95,9 +97,6 @@ static inline uint2_t semi_implicit_convergence(double u[M * N * P],
 				u_stencil_down = U_DOWN;
 				g_stencil_down = G_DOWN;
 
-				f_center = F(i, j, k);
-				r = cubic_approx(u_stencil_center, f_center,
-						 sigma2);
 				numer =
 				    u_stencil_center +
 				    dt * (right_mul_cache[i] +
@@ -105,7 +104,7 @@ static inline uint2_t semi_implicit_convergence(double u[M * N * P],
 					  u_stencil_up * g_stencil_up +
 					  u_stencil_down * g_stencil_down +
 					  in_mul_cache[i] +
-					  out_mul_cache[i] - gamma * f_center);
+					  out_mul_cache[i] - gamma * cubic_approx_cache[i]);
 				denom =
 				    1.0 + dt * (g_right_cache[i] +
 						g_left_cache[i] +
