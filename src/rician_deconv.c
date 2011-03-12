@@ -47,11 +47,11 @@ static inline double cubic_approx(const double u, double f, double sigma2)
 
 }
 
-static inline int semi_implicit_convergence(double u[M * N * P],
-					    const double g[M * N * P],
-					    const double f[M * N * P],
-					    double dt, double gamma,
-					    double sigma2)
+static inline uint2_t semi_implicit_convergence(double u[M * N * P],
+						const double g[M * N * P],
+						const double f[M * N * P],
+						double dt, double gamma,
+						double sigma2)
 {
 	uint32_t i, j, k;
 	double numer, denom;
@@ -217,5 +217,8 @@ void rician_deconv_denoise(double u[M * N * P], double f[M * N * P],
 		converged =
 		    semi_implicit_convergence(u, g, f, DENOISE_DT, gamma,
 					      sigma);
+		if (converged) {
+			return;
+		}
 	}
 }
