@@ -59,15 +59,18 @@ static inline void semi_implicit_update(double u[M * N * P],
 	double numer, denom;
 	double u_stencil_up, u_stencil_center, u_stencil_down;
 	double g_stencil_up, g_stencil_center, g_stencil_down;
-	double g_left_cache[M], g_right_cache[M];
+	double g_left_cache[M], g_right_cache[M], g_in_cache[M], g_out_cache[M];
 
 	/* Update u by a semi-implict step */
 	for (k = 1; k < P - 1; k++) {
 		for (j = 1; j < N - 1; j++) {
-            for (i = 0; i < M; i++) {
-                g_left_cache[i] = G(1,j-1,k);
-                g_right_cache[i] = G(1,j+1,k);
-            }
+			for (i = 0; i < M; i++) {
+#pragma AP pipeline
+				g_left_cache[i] = G(1, j - 1, k);
+				g_right_cache[i] = G(1, j + 1, k);
+				g_in_cache[i] = G(1, j, k - 1);
+				g_out_cache[i] = G(1, j, k + 1);
+			}
 			u_stencil_center = U(0, j, k);
 			g_stencil_center = U(0, j, k);
 			u_stencil_down = U(1, j, k);
@@ -88,12 +91,15 @@ static inline void semi_implicit_update(double u[M * N * P],
 					  g_stencil_up +
 					  u_stencil_down *
 					  g_stencil_down +
-					  U_IN * G_IN +
-					  U_OUT * G_OUT - gamma * F(i,j,k));
+					  U_IN * g_in_cache[i] +
+					  U_OUT * g_out_cache[i] - gamma * F(i,
+									     j,
+									     k));
 				denom =
-				    1.0 + dt * (g_right_cache[i] + g_left_cache[i] +
-						g_stencil_down +
-						g_stencil_up + G_IN + G_OUT);
+				    1.0 + dt * (g_right_cache[i] +
+						g_left_cache[i] +
+						g_stencil_down + g_stencil_up +
+						g_in_cache[i] + g_out_cache[i]);
 				u_stencil_center = numer / denom;
 				U_CENTER = u_stencil_center;
 			}
