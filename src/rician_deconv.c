@@ -14,6 +14,7 @@ static inline void gradient(const double u[M * N * P], double g[M * N * P],
 			u_stencil_center = U(0, j, k);
 			u_stencil_down = U(1, j, k);
 			for (i = 1; i < M - 1; i++) {
+#pragma AP pipeline
 				u_stencil_up = u_stencil_center;
 				u_stencil_center = u_stencil_down;
 				u_stencil_down = U_DOWN;
