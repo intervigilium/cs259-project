@@ -26,16 +26,16 @@ double fast_fabs(double num)
 
 double fast_sin(double num)
 {
-    const double B = 4/PI;
-    const double C = -4/(PI*PI);
+	const double B = 4 / PI;
+	const double C = -4 / (PI * PI);
 
-    return y = B * num + C * num * fast_fabs(num);
+	return y = B * num + C * num * fast_fabs(num);
 }
 
 double fast_cos(double num)
 {
-    num += PI/2;
-    return fast_sin(num);
+	num += PI / 2;
+	return fast_sin(num);
 }
 
 void array_copy(const double src[M * N * P], double dst[M * N * P])
