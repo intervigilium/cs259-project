@@ -75,6 +75,7 @@ void two_phase_3d_op_explicit(double phi[M * N * P],
 	for (i = 1; i < M - 1; i++) {
 		for (j = 1; j < N - 1; j++) {
 			for (k = 1; k < P - 1; k++) {
+#pragma AP pipeline
 				/* stencil code */
 				stencil[0][0][0] = stencil[0][0][1];
 				stencil[0][1][0] = stencil[0][1][1];
