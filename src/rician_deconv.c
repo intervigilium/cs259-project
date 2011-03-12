@@ -91,7 +91,8 @@ static inline void semi_implicit_update(double u[M * N * P],
 				    1.0 + dt * (G_RIGHT + G_LEFT +
 						g_stencil_down +
 						g_stencil_up + G_IN + G_OUT);
-				U_CENTER = numer / denom;
+				u_stencil_center = numer / denom;
+				U_CENTER = u_stencil_center;
 			}
 		}
 	}
