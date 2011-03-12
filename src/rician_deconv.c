@@ -59,6 +59,7 @@ static inline uint2_t semi_implicit_convergence(double u[M * N * P],
 	double u_stencil_up, u_stencil_center, u_stencil_down;
 	double g_stencil_up, g_stencil_center, g_stencil_down;
 	double g_left_cache[M], g_right_cache[M], g_in_cache[M], g_out_cache[M];
+	double u_res_cache[M];
 
 	/* Update u by a semi-implict step */
 	for (k = 1; k < P - 1; k++) {
@@ -102,11 +103,16 @@ static inline uint2_t semi_implicit_convergence(double u[M * N * P],
 						g_in_cache[i] + g_out_cache[i]);
 				u_stencil_center = numer / denom;
 
-				if (fast_fabs(u_last - u_stencil_center) <=
-				    DENOISE_TOLERANCE) {
-					return 1;
-				}
-				U_CENTER = u_stencil_center;
+//				if (fast_fabs(u_last - u_stencil_center) <=
+//				    DENOISE_TOLERANCE) {
+//					return 1;
+//				}
+//				U_CENTER = u_stencil_center;
+				u_res_cache[i] = u_stencil_center;
+			}
+			for (i = 1; i < M-1; i++) {
+#pragma AP pipeline
+				U_CENTER = u_res_cache[i];
 			}
 		}
 	}
@@ -217,8 +223,8 @@ void rician_deconv_denoise(double u[M * N * P], double f[M * N * P],
 		converged =
 		    semi_implicit_convergence(u, g, f, DENOISE_DT, gamma,
 					      sigma);
-		if (converged) {
-			return;
-		}
+//		if (converged) {
+//			return;
+//		}
 	}
 }
