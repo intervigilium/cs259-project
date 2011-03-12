@@ -69,7 +69,7 @@ static inline uint2_t semi_implicit_convergence(double u[M * N * P],
 	/* Update u by a semi-implict step */
 	for (k = 1; k < P - 1; k++) {
 		for (j = 1; j < N - 1; j++) {
-			for (i = 1; i < M-1; i++) {
+			for (i = 1; i < M - 1; i++) {
 #pragma AP pipeline
 				g_left_cache[i] = G(1, j - 1, k);
 				g_right_cache[i] = G(1, j + 1, k);
@@ -83,7 +83,9 @@ static inline uint2_t semi_implicit_convergence(double u[M * N * P],
 				    g_in_cache[i] * U(1, j, k - 1);
 				out_mul_cache[i] =
 				    g_in_cache[i] * U(1, j, k + 1);
-				cubic_approx_cache[i] = cubic_approx(U(i,j,k), F(i,j,k), sigma2);
+				cubic_approx_cache[i] =
+				    cubic_approx(U(i, j, k), F(i, j, k),
+						 sigma2);
 			}
 			u_stencil_center = U(0, j, k);
 			g_stencil_center = U(0, j, k);
@@ -105,7 +107,8 @@ static inline uint2_t semi_implicit_convergence(double u[M * N * P],
 					  u_stencil_up * g_stencil_up +
 					  u_stencil_down * g_stencil_down +
 					  in_mul_cache[i] +
-					  out_mul_cache[i] - gamma * cubic_approx_cache[i]);
+					  out_mul_cache[i] -
+					  gamma * cubic_approx_cache[i]);
 				denom =
 				    1.0 + dt * (g_right_cache[i] +
 						g_left_cache[i] +
@@ -125,7 +128,7 @@ static inline uint2_t semi_implicit_convergence(double u[M * N * P],
 			}
 		}
 	}
-    return 0;
+	return 0;
 }
 
 static inline void semi_implicit_update(double u[M * N * P],
