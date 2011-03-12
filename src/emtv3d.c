@@ -603,17 +603,23 @@ static inline double raytracer_forward(double src_x, double src_y, double src_z,
 	}
 }
 
-void raytracer_projection_forward(double img[M * N * P], double D, uint32_t q,
-				  double ss, double d, double dtheta,
-				  double ssz, uint32_t qz,
-				  double sino[M * N * P])
+void raytracer_projection_forward(double img[M * N * P], double sino[M * N * P])
 {
+	/* formerly parameters, actually constants from CPU_Routine.c */
+	double D = RT_PROJ_D;
+	double d = RT_PROJ_D1;
+	double ss = RT_PROJ_SS;
+	double ssz = RT_PROJ_SSZ;
+
+	uint32_t q = RT_PROJ_Q;
+	uint32_t qz = RT_PROJ_QZ;
+
 	double src_x, src_y, src_z;
 	double det_x, det_y, det_z;
 
-	uint32_t NS = (uint32_t) (359.0 / dtheta);
+	uint32_t NS = (uint32_t) (359.0 / RT_PROJ_DTHETA);
 	double thetaS = 0.;
-	double dtheta2 = (double)(dtheta * PI / 180.);
+	double dtheta2 = (double)(RT_PROJ_DTHETA * PI / 180.);
 	double ss2 = (double)(ss * PI / 180.);
 	double aa;
 	uint32_t i, j, k;

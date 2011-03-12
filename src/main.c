@@ -28,7 +28,7 @@ int main(double u1[M * N * P], double u2[M * N * P], double u3[M * N * P],
 		two_phase_3d_op_explicit(u1, u2, u3, in1, in2, in3);
 	} else if (select == 4) {
 		/* for emtv3d */
-		emtv3d();
+		raytracer_projection_forward(u1, u2);
 	}
 
 	return 0;
