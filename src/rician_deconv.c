@@ -36,17 +36,79 @@ static inline void gradient(const double u[M * N * P], double g[M * N * P],
 	}
 }
 
-static inline void cubic_approx(const double u[M * N * P], double f[M * N * P],
-				double sigma2)
+static inline double cubic_approx(const double u, double f, double sigma2)
 {
-	uint32_t i;
 	double r, numer, denom;
-	for (i = 0; i < M * N * P; i++) {
-#pragma pipeline
-		r = u[i] * f[i] / sigma2;
-		numer = r * 2.38944 + r * (0.950037 + r);
-		denom = 4.65314 + r * (2.57541 + r * (1.48937 + r));
-		f[i] *= r;
+
+	r = u * f / sigma2;
+	numer = r * 2.38944 + r * (0.950037 + r);
+	denom = 4.65314 + r * (2.57541 + r * (1.48937 + r));
+	return f * r;
+
+}
+
+static inline int semi_implicit_convergence(double u[M * N * P],
+					    const double g[M * N * P],
+					    const double f[M * N * P],
+					    double dt, double gamma,
+					    double sigma2)
+{
+	uint32_t i, j, k;
+	double numer, denom;
+	double u_last;
+	double u_stencil_up, u_stencil_center, u_stencil_down;
+	double g_stencil_up, g_stencil_center, g_stencil_down;
+	double g_left_cache[M], g_right_cache[M], g_in_cache[M], g_out_cache[M];
+
+	/* Update u by a semi-implict step */
+	for (k = 1; k < P - 1; k++) {
+		for (j = 1; j < N - 1; j++) {
+			for (i = 0; i < M; i++) {
+#pragma AP pipeline
+				g_left_cache[i] = G(1, j - 1, k);
+				g_right_cache[i] = G(1, j + 1, k);
+				g_in_cache[i] = G(1, j, k - 1);
+				g_out_cache[i] = G(1, j, k + 1);
+			}
+			u_stencil_center = U(0, j, k);
+			g_stencil_center = U(0, j, k);
+			u_stencil_down = U(1, j, k);
+			g_stencil_down = G(1, j, k);
+			for (i = 1; i < M - 1; i++) {
+				u_last = u_stencil_center;
+				u_stencil_up = u_stencil_center;
+				g_stencil_up = g_stencil_center;
+				u_stencil_center = u_stencil_down;
+				g_stencil_center = g_stencil_down;
+				u_stencil_down = U_DOWN;
+				g_stencil_down = G_DOWN;
+
+				r = cubic_approx(u_stencil_center, F(i, j, k),
+						 sigma2);
+				numer =
+				    u_stencil_center +
+				    dt * (U_RIGHT * g_right_cache[i] +
+					  U_LEFT * g_left_cache[i] +
+					  u_stencil_up * g_stencil_up +
+					  u_stencil_down * g_stencil_down +
+					  U_IN * g_in_cache[i] +
+					  U_OUT * g_out_cache[i] - gamma * F(i,
+									     j,
+									     k));
+				denom =
+				    1.0 + dt * (g_right_cache[i] +
+						g_left_cache[i] +
+						g_stencil_down + g_stencil_up +
+						g_in_cache[i] + g_out_cache[i]);
+				u_stencil_center = numer / denom;
+
+				if (fast_fabs(u_last - u_stencil_center) <=
+				    DENOISE_TOLERANCE) {
+					return 1;
+				}
+				U_CENTER = u_stencil_center;
+			}
+		}
 	}
 }
 
@@ -111,61 +173,47 @@ void rician_deconv_deblur(double u[M * N * P], double f[M * N * P],
 			  double g[M * N * P], double conv[M * N * P],
 			  double Ksigma, double sigma, double lambda)
 {
-	double sigma2, gamma, r;
-	double numer, denom;
-	double epsilon, dt;
-	uint32_t i, j, k;
-	uint32_t max_iterations, iteration;
+	double sigma2, gamma;
+	uint32_t iteration;
 
 	/* Initializations */
 	sigma2 = SQR(sigma);
 	gamma = lambda / sigma2;
-	epsilon = DEBLUR_EPSILON;
-	dt = DEBLUR_DT;
-	max_iterations = DEBLUR_ITERATIONS;
 
 	/* Main gradient descent loop */
-	for (iteration = 1; iteration <= max_iterations; iteration++) {
+	for (iteration = 1; iteration <= DEBLUR_ITERATIONS; iteration++) {
 		/* Approximate g = 1/|grad u| */
-		gradient(u, g, epsilon);
+		gradient(u, g, DEBLUR_EPSILON);
+		array_copy(u, conv);
 
 		/* calculate with rational cubic approx */
-		cubic_approx(u, f, sigma2);
-
-		array_copy(u, conv);
 		for (i = 0; i < M * N * P; i++) {
 #pragma AP pipeline
+			f[i] = cubic_approx(u[i], f[i], sigma2);
 			conv[i] -= f[i];
 		}
 		gaussian_blur(conv, Ksigma);
-		semi_implicit_update(u, g, conv, dt, gamma);
+		semi_implicit_update(u, g, conv, DEBLUR_DT, gamma);
 	}
 }
 
 void rician_deconv_denoise(double u[M * N * P], double f[M * N * P],
 			   double g[M * N * P], double sigma, double lambda)
 {
-	double sigma2, gamma, r;
-	double numer, denom;
-	double epsilon, dt;
-	uint32_t i, j, k;
-	uint32_t max_iterations, iteration;
+	double sigma2, gamma;
+	uint32_t iteration;
 
 	/* Initializations */
 	sigma2 = SQR(sigma);
 	gamma = lambda / sigma2;
-	epsilon = DENOISE_EPSILON;
-	dt = DENOISE_DT;
-	max_iterations = DENOISE_ITERATIONS;
 
 	/* Main gradient descent loop */
-	for (iteration = 1; iteration <= max_iterations; iteration++) {
+	for (iteration = 1; iteration <= max_DENOISE_ITERATIONS; iteration++) {
 		/* Approximate g = 1/|grad u| */
-		gradient(u, g, epsilon);
-
-		/* calculate with rational cubic approx */
-		cubic_approx(u, f, sigma2);
-
-		semi_implicit_update(u, g, f, dt, gamma);
+		gradient(u, g, DENOISE_EPSILON);
+		converged = 1;
+		converged =
+		    semi_implicit_convergence(u, g, f, DENOISE_DT, gamma,
+					      sigma);
 	}
 }

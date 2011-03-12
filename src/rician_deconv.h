@@ -10,6 +10,7 @@
 #define DENOISE_EPSILON 5.0
 #define DENOISE_DT 1.0E-20
 #define DENOISE_ITERATIONS 500
+#define DENOISE_TOLERANCE 2.0E-3
 
 #define U(a,b,c) (u[(a)+(b)*N+(c)*M*N])
 #define G(a,b,c) (g[(a)+(b)*N+(c)*M*N])
