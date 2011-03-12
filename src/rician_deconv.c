@@ -126,6 +126,7 @@ static inline uint2_t semi_implicit_convergence(double u[M * N * P],
 			}
 		}
 	}
+    return 0;
 }
 
 static inline void semi_implicit_update(double u[M * N * P],
