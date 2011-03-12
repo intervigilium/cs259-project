@@ -55,9 +55,9 @@ static inline double raytracer_forward(double src_x, double src_y, double src_z,
 			 ),
 			 MAX(MIN
 			     (LAMBDA_Y(0, src_y, det_y, ray_len),
-			      LAMBDA_Y(N, src_y, det_y, ray_len),
+			      LAMBDA_Y(N, src_y, det_y, ray_len)),
 			      MIN(LAMBDA_Z(0, src_z, det_z, ray_len),
-				  LAMBDA_Z(P, src_z, det_z, ray_len)))
+				  LAMBDA_Z(P, src_z, det_z, ray_len))
 			 )
 	    );
 
@@ -625,9 +625,9 @@ void raytracer_projection_forward(double img[M * N * P], double sino[M * N * P])
 	uint32_t i, j, k;
 
 	for (i = 0; i <= NS; i++) {
-		source.x = D * fast_cos(thetaS) + d;
-		source.y = D * fast_sin(thetaS) + d;
-		source.z = d;
+		src_x = D * fast_cos(thetaS) + d;
+		src_y = D * fast_sin(thetaS) + d;
+		src_z = d;
 		for (j = -q; j < q + 1; j++) {
 			det_x = D * fast_cos(j * ss2 + PI + thetaS) + d;
 			det_y = D * fast_sin(j * ss2 + PI + thetaS) + d;
