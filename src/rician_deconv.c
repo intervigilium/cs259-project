@@ -55,7 +55,7 @@ static inline int semi_implicit_convergence(double u[M * N * P],
 {
 	uint32_t i, j, k;
 	double numer, denom;
-	double u_last;
+	double u_last, r;
 	double u_stencil_up, u_stencil_center, u_stencil_down;
 	double g_stencil_up, g_stencil_center, g_stencil_down;
 	double g_left_cache[M], g_right_cache[M], g_in_cache[M], g_out_cache[M];
@@ -173,6 +173,7 @@ void rician_deconv_deblur(double u[M * N * P], double f[M * N * P],
 			  double g[M * N * P], double conv[M * N * P],
 			  double Ksigma, double sigma, double lambda)
 {
+	uint32_t i;
 	double sigma2, gamma;
 	uint32_t iteration;
 
@@ -202,13 +203,14 @@ void rician_deconv_denoise(double u[M * N * P], double f[M * N * P],
 {
 	double sigma2, gamma;
 	uint32_t iteration;
+	uint2_t converged;
 
 	/* Initializations */
 	sigma2 = SQR(sigma);
 	gamma = lambda / sigma2;
 
 	/* Main gradient descent loop */
-	for (iteration = 1; iteration <= max_DENOISE_ITERATIONS; iteration++) {
+	for (iteration = 1; iteration <= DENOISE_ITERATIONS; iteration++) {
 		/* Approximate g = 1/|grad u| */
 		gradient(u, g, DENOISE_EPSILON);
 		converged = 1;

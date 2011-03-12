@@ -3,6 +3,7 @@
 
 #include <autopilot_tech.h>
 
+#define uint2_t uint2
 #define uint4_t uint4
 #define uint32_t uint32
 #define uint64_t uint64
