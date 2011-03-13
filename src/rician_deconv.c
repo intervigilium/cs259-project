@@ -171,63 +171,90 @@ static inline void semi_implicit_update(double u[M][N][P],
 	double numer, denom;
 	double u_stencil_up, u_stencil_center, u_stencil_down;
 	double g_stencil_up, g_stencil_center, g_stencil_down;
-	double g_left_cache[M], g_right_cache[M], g_in_cache[M], g_out_cache[M];
-	double left_mul_cache[M], right_mul_cache[M], in_mul_cache[M],
-	    out_mul_cache[M];
-	double u_left_cache[M];
+	double g_left_cache[M], g_right_cache[M], g_center_cache[M],
+	    g_in_cache[M], g_out_cache[M];
+	double u_right_cache[M], u_center_cache[M], u_left_cache[M];
+	double u_stencil_cache[M], g_stencil_cache[M];
 
 	/* Update u by a semi-implict step */
 	for (k = 1; k < P - 1; k++) {
+		for (i = 0; i < M; i++) {
+#pragma AP pipeline
+			/* load up initial j+1 caches */
+			u_center_cache[i] = U(i, 0, k);
+			u_right_cache[i] = U(i, 1, k);
+
+			g_center_cache[i] = G(i, 0, k);
+			g_right_cache[i] = G(i, 1, k);
+		}
 		for (j = 1; j < N - 1; j++) {
 			for (i = 0; i < M; i++) {
 #pragma AP pipeline
-				g_left_cache[i] = G(1, j - 1, k);
-				g_right_cache[i] = G(1, j + 1, k);
+				/* load up next set of j+1 caches */
+				u_left_cache[i] = u_center_cache[i];
+				u_center_cache[i] = u_right_cache[i];
+				u_right_cache[i] = U(i, j + 1, k);
+
+				g_left_cache[i] = g_center_cache[i];
+				g_center_cache[i] = g_right_cache[i];
+				g_right_cache[i] = G(i, j + 1, k);
+
 				g_in_cache[i] = G(1, j, k - 1);
 				g_out_cache[i] = G(1, j, k + 1);
-				left_mul_cache[i] =
-				    g_left_cache[i] * U(1, j - 1, k);
-				right_mul_cache[i] =
-				    g_right_cache[i] * U(1, j + 1, k);
-				in_mul_cache[i] =
-				    g_in_cache[i] * U(1, j, k - 1);
-				out_mul_cache[i] =
-				    g_out_cache[i] * U(1, j, k + 1);
-			}
-			u_stencil_center = U(0, j, k);
-			g_stencil_center = U(0, j, k);
-			u_stencil_down = U(1, j, k);
-			g_stencil_down = G(1, j, k);
-			for (i = 1; i < M - 1; i++) {
-				u_stencil_up = u_stencil_center;
-				g_stencil_up = g_stencil_center;
-				u_stencil_center = u_stencil_down;
-				g_stencil_center = g_stencil_down;
-				u_stencil_down = U_DOWN;
-				g_stencil_down = G_DOWN;
 
-				numer =
-				    u_stencil_center +
-				    dt * (right_mul_cache[i] +
-					  left_mul_cache[i] +
-					  u_stencil_up *
-					  g_stencil_up +
-					  u_stencil_down *
-					  g_stencil_down +
-					  in_mul_cache[i] +
-					  out_mul_cache[i] - gamma * F(i,
-								       j, k));
-				denom =
-				    1.0 + dt * (g_right_cache[i] +
-						g_left_cache[i] +
-						g_stencil_down + g_stencil_up +
-						g_in_cache[i] + g_out_cache[i]);
-				u_stencil_center = numer / denom;
-				u_left_cache[i] = u_stencil_center;
+				/* precompute stencil at i,j,k for u */
+				u_stencil_cache[i] =
+				    g_left_cache[i] * u_left_cache[i];
+				u_stencil_cache[i] +=
+				    g_right_cache[i] * u_right_cache[i];
+				u_stencil_cache[i] +=
+				    g_in_cache[i] * U(i, j, k - 1);
+				u_stencil_cache[i] +=
+				    g_out_cache[i] * U(i, j, k + 1);
+				/* stencil for u_down * g_down */
+				u_stencil_cache[i] +=
+				    g_center_cache[i + 1] * u_center_cache[i +
+									   1];
+
+				/* subtract conv data to stencil data */
+				u_stencil_cache[i] -= F(i, j, k) * gamma;
+
+				/* precompute stencil at i,j,k for g */
+				g_stencil_cache[i] =
+				    g_left_cache[i] + g_right_cache[i] +
+				    g_in_cache[i] + g_out_cache[i];
+				g_stencil_cache[i] *= dt;
+
+			}
+
+			/* load up initial cache for i+1 */
+			u_stencil_center = u_center_cache[0];
+			u_stencil_down = u_center_cache[1];
+			g_stencil_center = g_center_cache[0];
+			g_stencil_down = g_center_cache[1];
+			for (i = 1; i < M - 1; i++) {
+				/* load up cache for i+1 */
+				u_stencil_up = u_stencil_center;
+				u_stencil_center = u_stencil_down;
+				u_stencil_down = u_center_cache[i + 1];
+				g_stencil_up = g_stencil_center;
+				g_stencil_center = g_stencil_down;
+				g_stencil_down = g_center_cache[i + 1];
+
+				u_stencil_center =
+				    (u_stencil_center + u_stencil_cache[i] +
+				     dt * u_stencil_up * g_stencil_up) / (1.0 +
+									  g_stencil_cache
+									  [i] +
+									  dt *
+									  g_stencil_down
+									  *
+									  g_stencil_up);
+				u_center_cache[i] = u_stencil_center;
 			}
 			for (i = 1; i < M - 1; i++) {
 #pragma AP pipeline
-				U_CENTER = u_left_cache[i];
+				U_CENTER = u_center_cache[i];
 			}
 		}
 	}
