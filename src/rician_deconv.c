@@ -206,7 +206,7 @@ void rician_deconv_deblur(double u[M][N][P], double f[M][N][P],
 			  double g[M][N][P], double conv[M][N][P],
 			  double Ksigma, double sigma, double lambda)
 {
-	uint32_t i;
+	uint32_t i, j, k;
 	double sigma2, gamma;
 	uint32_t iteration;
 
