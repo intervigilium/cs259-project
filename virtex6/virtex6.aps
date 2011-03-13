@@ -12,6 +12,7 @@
     <config>
         <schedule model="main"/>
         <config_autosim O="0" setup="0" trace_level="none"/>
+        <config_bind effort="high"/>
     </config>
     <UIConfigurations>
         <UIAutosynConf alteraLibrarySpeedFilter="any" hideTrivialOp="true">
