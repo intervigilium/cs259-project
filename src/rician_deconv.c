@@ -62,7 +62,7 @@ static inline uint2_t semi_implicit_convergence(double u[M][N][P],
 	double g_left_cache[M], g_right_cache[M], g_center_cache[M],
 	    g_in_cache[M], g_out_cache[M];
 	double u_right_cache[M], u_center_cache[M], u_left_cache[M];
-	double stencil_cache[M];
+	double u_stencil_cache[M], g_stencil_cache[M];
 	double cubic_approx_cache[M];
 	/* caches j and i direction accesses */
 
@@ -92,19 +92,24 @@ static inline uint2_t semi_implicit_convergence(double u[M][N][P],
 				g_in_cache[i] = G(i, j, k - 1);
 				g_out_cache[i] = G(i, j, k + 1);
 
-				/* precompute stencil at i,j,k */
-				stencil_cache[i] =
+				/* precompute stencil at i,j,k for u */
+				u_stencil_cache[i] =
 				    g_left_cache[i] * u_left_cache[i];
-				stencil_cache[i] +=
+				u_stencil_cache[i] +=
 				    g_right_cache[i] * u_right_cache[i];
-				stencil_cache[i] +=
+				u_stencil_cache[i] +=
 				    g_in_cache[i] * U(i, j, k - 1);
-				stencil_cache[i] +=
+				u_stencil_cache[i] +=
 				    g_out_cache[i] * U(i, j, k + 1);
 				/* stencil for u_down * g_down */
-				stencil_cache[i] +=
+				u_stencil_cache[i] +=
 				    g_center_cache[i + 1] * u_center_cache[i +
 									   1];
+
+				/* precompute stencil at i,j,k for g */
+				g_stencil_cache[i] =
+				    g_left_cache[i] + g_right_cache[i] +
+				    g_in_cache[i] + g_out_cache[i];
 
 				/* precompute cubic approx at i,j,k */
 				cubic_approx_cache[i] =
@@ -130,18 +135,18 @@ static inline uint2_t semi_implicit_convergence(double u[M][N][P],
 
 				u_stencil_center =
 				    (u_stencil_center +
-				    dt * (stencil_cache[i] +
-					  u_stencil_up * g_stencil_up +
-					  cubic_approx_cache[i])) /
-				    (1.0 + dt * (g_right_cache[i] +
-						g_left_cache[i] +
-						g_stencil_down + g_stencil_up +
-						g_in_cache[i] + g_out_cache[i]));
+				     dt * (u_stencil_cache[i] +
+					   u_stencil_up * g_stencil_up +
+					   cubic_approx_cache[i])) /
+				    (1.0 + dt * (g_stencil_cache[i] +
+						 g_stencil_down +
+						 g_stencil_up));
 
 //                              if (fast_fabs(u_last - u_stencil_center) <=
 //                                  DENOISE_TOLERANCE) {
 //                                      return 1;
 //                              }
+
 				u_center_cache[i] = u_stencil_center;
 			}
 			/* flush results of row j, k to memory */
