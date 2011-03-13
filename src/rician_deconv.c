@@ -56,7 +56,6 @@ static inline uint2_t semi_implicit_convergence(double u[M][N][P],
 						double sigma2)
 {
 	uint32_t i, j, k;
-	double numer, denom;
 	double u_last, r;
 	double u_stencil_up, u_stencil_center, u_stencil_down;
 	double g_stencil_up, g_stencil_center, g_stencil_down;
@@ -129,17 +128,15 @@ static inline uint2_t semi_implicit_convergence(double u[M][N][P],
 				g_stencil_center = g_stencil_down;
 				g_stencil_down = g_center_cache[i + 1];
 
-				numer =
-				    u_stencil_center +
+				u_stencil_center =
+				    (u_stencil_center +
 				    dt * (stencil_cache[i] +
 					  u_stencil_up * g_stencil_up +
-					  cubic_approx_cache[i]);
-				denom =
-				    1.0 + dt * (g_right_cache[i] +
+					  cubic_approx_cache[i])) /
+				    (1.0 + dt * (g_right_cache[i] +
 						g_left_cache[i] +
 						g_stencil_down + g_stencil_up +
-						g_in_cache[i] + g_out_cache[i]);
-				u_stencil_center = numer / denom;
+						g_in_cache[i] + g_out_cache[i]));
 
 //                              if (fast_fabs(u_last - u_stencil_center) <=
 //                                  DENOISE_TOLERANCE) {
