@@ -225,6 +225,7 @@ static inline void semi_implicit_update(double u[M][N][P],
 				    dt;
 			}
 			for (i = 1; i < M - 1; i++) {
+#pragma AP pipeline
 				u_stencil_center =
 				    (u_stencil_cache[i] +
 				     up_cache[i]) / g_stencil_cache[i];
