@@ -105,16 +105,17 @@ static inline uint2_t semi_implicit_convergence(double u[M][N][P],
 				u_stencil_cache[i] +=
 				    g_center_cache[i + 1] * u_center_cache[i +
 									   1];
+				/* add cubic approx to stencil data */
+				u_stencil_cache[i] +=
+				    cubic_approx(u_center_cache[i], F(i, j, k),
+						 sigma2) * gamma;
+				u_stencil_cache[i] *= dt;
 
 				/* precompute stencil at i,j,k for g */
 				g_stencil_cache[i] =
 				    g_left_cache[i] + g_right_cache[i] +
 				    g_in_cache[i] + g_out_cache[i];
-
-				/* precompute cubic approx at i,j,k */
-				cubic_approx_cache[i] =
-				    cubic_approx(u_center_cache[i], F(i, j, k),
-						 sigma2) * gamma;
+				g_stencil_cache[i] *= dt;
 			}
 			/* load up initial cache for i+1 */
 			u_stencil_center = u_center_cache[0];
@@ -134,13 +135,15 @@ static inline uint2_t semi_implicit_convergence(double u[M][N][P],
 				g_stencil_down = g_center_cache[i + 1];
 
 				u_stencil_center =
-				    (u_stencil_center +
-				     dt * (u_stencil_cache[i] +
-					   u_stencil_up * g_stencil_up +
-					   cubic_approx_cache[i])) /
-				    (1.0 + dt * (g_stencil_cache[i] +
-						 g_stencil_down +
-						 g_stencil_up));
+				    (u_stencil_center + u_stencil_cache[i] +
+				     dt * u_stencil_up * g_stencil_up) / (1.0 +
+									  g_stencil_cache
+									  [i] +
+									  dt *
+									  g_stencil_down
+									  +
+									  dt *
+									  g_stencil_up);
 
 //                              if (fast_fabs(u_last - u_stencil_center) <=
 //                                  DENOISE_TOLERANCE) {
