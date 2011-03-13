@@ -1,7 +1,7 @@
 #include "rician_deconv.h"
 #include "gaussian_blur.h"
 
-static inline void gradient(const double u[M * N * P], double g[M * N * P],
+static inline void gradient(const double u[M][N][P], double g[M][N][P],
 			    double epsilon)
 {
 	uint32_t i, j, k;
@@ -49,9 +49,9 @@ static inline double cubic_approx(double u, double f, double sigma2)
 
 }
 
-static inline uint2_t semi_implicit_convergence(double u[M * N * P],
-						const double g[M * N * P],
-						const double f[M * N * P],
+static inline uint2_t semi_implicit_convergence(double u[M][N][P],
+						const double g[M][N][P],
+						const double f[M][N][P],
 						double dt, double gamma,
 						double sigma2)
 {
@@ -131,9 +131,9 @@ static inline uint2_t semi_implicit_convergence(double u[M * N * P],
 	return 0;
 }
 
-static inline void semi_implicit_update(double u[M * N * P],
-					const double g[M * N * P],
-					const double f[M * N * P], double dt,
+static inline void semi_implicit_update(double u[M][N][P],
+					const double g[M][N][P],
+					const double f[M][N][P], double dt,
 					double gamma)
 {
 	uint32_t i, j, k;
@@ -202,8 +202,8 @@ static inline void semi_implicit_update(double u[M * N * P],
 	}
 }
 
-void rician_deconv_deblur(double u[M * N * P], double f[M * N * P],
-			  double g[M * N * P], double conv[M * N * P],
+void rician_deconv_deblur(double u[M][N][P], double f[M][N][P],
+			  double g[M][N][P], double conv[M][N][P],
 			  double Ksigma, double sigma, double lambda)
 {
 	uint32_t i;
@@ -231,8 +231,8 @@ void rician_deconv_deblur(double u[M * N * P], double f[M * N * P],
 	}
 }
 
-void rician_deconv_denoise(double u[M * N * P], double f[M * N * P],
-			   double g[M * N * P], double sigma, double lambda)
+void rician_deconv_denoise(double u[M][N][P], double f[M][N][P],
+			   double g[M][N][P], double sigma, double lambda)
 {
 	double sigma2, gamma;
 	uint32_t iteration;

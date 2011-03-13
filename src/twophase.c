@@ -1,6 +1,6 @@
 #include "twophase.h"
 
-static inline void neumann_bc(double curvature_motion_part[M * N * P])
+static inline void neumann_bc(double curvature_motion_part[M][N][P])
 {
 	uint32_t i, j, k;
 	for (j = 0; j < N; j++) {
@@ -37,9 +37,9 @@ static inline void neumann_bc(double curvature_motion_part[M * N * P])
 	CMP(M - 1, N - 1, P - 1) = CMP(M - 2, N - 2, P - 2);
 }
 
-void two_phase_3d_op_explicit(double phi[M * N * P],
-			      const double u0[M * N * P],
-			      double curvature_motion_part[M * N * P],
+void two_phase_3d_op_explicit(double phi[M][N][P],
+			      const double u0[M][N][P],
+			      double curvature_motion_part[M][N][P],
 			      double dt, double c1, double c2)
 {
 	double mu = TP_MU;
@@ -183,11 +183,14 @@ void two_phase_3d_op_explicit(double phi[M * N * P],
 		}
 	}
 
-	/* NeumannBC functionality inlined, pipeline this */
 	neumann_bc(curvature_motion_part);
 
-	for (i = 0; i < M * N * P; i++) {
+	for (k = 0; k < P; k++) {
+		for (j = 0; j < N; j++) {
+			for (i = 0; i < M; i++) {
 #pragma AP pipeline
-		phi[i] += curvature_motion_part[i] * dt;
+				PHI(i, j, k) += CMP(i, j, k) * dt;
+			}
+		}
 	}
 }

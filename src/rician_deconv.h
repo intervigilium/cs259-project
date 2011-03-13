@@ -12,9 +12,9 @@
 #define DENOISE_ITERATIONS 50
 #define DENOISE_TOLERANCE 2.0E-3
 
-#define U(a,b,c) (u[(a)+(b)*N+(c)*M*N])
-#define G(a,b,c) (g[(a)+(b)*N+(c)*M*N])
-#define F(a,b,c) (f[(a)+(b)*N+(c)*M*N])
+#define U(a,b,c) (u[(a)][(b)][(c)])
+#define G(a,b,c) (g[(a)][(b)][(c)])
+#define F(a,b,c) (f[(a)][(b)][(c)])
 
 #define U_CENTER U(i,j,k)
 #define U_LEFT U(i,j-1,k)
@@ -32,11 +32,11 @@
 #define G_IN G(i,j,k-1)
 #define G_OUT G(i,j,k+1)
 
-void rician_deconv_deblur(double u[M * N * P], double f[M * N * P],
-			  double g[M * N * P], double conv[M * N * P],
+void rician_deconv_deblur(double u[M][N][P], double f[M][N][P],
+			  double g[M][N][P], double conv[M][N][P],
 			  double Ksigma, double sigma, double lambda);
 
-void rician_deconv_denoise(double u[M * N * P], double f[M * N * P],
-			   double g[M * N * P], double sigma, double lambda);
+void rician_deconv_denoise(double u[M][N][P], double f[M][N][P],
+			   double g[M][N][P], double sigma, double lambda);
 
 #endif
