@@ -26,6 +26,6 @@ double fast_sin(double num);
 
 double fast_cos(double num);
 
-void array_copy(const double src[M * N * P], double dst[M * N * P]);
+void array_copy(const double src[M][N][P], double dst[M][N][P]);
 
 #endif

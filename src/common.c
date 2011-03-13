@@ -38,11 +38,15 @@ double fast_cos(double num)
 	return fast_sin(num);
 }
 
-void array_copy(const double src[M * N * P], double dst[M * N * P])
+void array_copy(const double src[M][N][P], double dst[M][N][P])
 {
-	uint32_t i;
-	for (i = 0; i < M * N * P; i++) {
+	uint32_t i, j, k;
+	for (k = 0; k < P; k++) {
+		for (j = 0; j < N; j++) {
+			for (i = 0; i < M; i++) {
 #pragma AP pipeline
-		dst[i] = src[i];
+				dst[i][j][k] = src[i][j][k];
+			}
+		}
 	}
 }
