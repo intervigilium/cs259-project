@@ -24,7 +24,7 @@ int main(double u1[M][N][P], double u2[M][N][P], double u3[M][N][P],
 		gaussian_blur(u3, in1);
 	} else if (select == 3) {
 		/* for segmentation */
-//              two_phase_3d_op_explicit(u1, u2, u3, in1, in2, in3);
+		two_phase_3d_op_explicit(u1, u2, u3, in1, in2, in3);
 	} else if (select == 4) {
 		/* for emtv3d */
 //              raytracer_projection_forward(u1, u2);
