@@ -212,8 +212,8 @@ static inline void semi_implicit_update(double u[M][N][P],
 				g_stencil_cache[i] += g_in;
 				g_stencil_cache[i] += g_out;
 				/* stencil for g_up, g_down */
-				g_stencil_cache[i] += g_center[i - 1];
-				g_stencil_cache[i] += g_center[i + 1];
+				g_stencil_cache[i] += g_center_cache[i - 1];
+				g_stencil_cache[i] += g_center_cache[i + 1];
 				g_stencil_cache[i] *= dt;
 				g_stencil_cache[i] += 1.0;
 			}
