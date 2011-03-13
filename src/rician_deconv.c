@@ -61,8 +61,7 @@ static inline uint2_t semi_implicit_convergence(double u[M][N][P],
 	double u_stencil_up, u_stencil_center, u_stencil_down;
 	double g_stencil_up, g_stencil_center, g_stencil_down;
 	double g_left_cache[M], g_right_cache[M], g_in_cache[M], g_out_cache[M];
-	double left_mul_cache[M], right_mul_cache[M], in_mul_cache[M],
-	    out_mul_cache[M];
+	double stencil_cache[M];
 	double cubic_approx_cache[M];
 	double u_res_cache[M];
 
@@ -75,17 +74,13 @@ static inline uint2_t semi_implicit_convergence(double u[M][N][P],
 				g_right_cache[i] = G(1, j + 1, k);
 				g_in_cache[i] = G(1, j, k - 1);
 				g_out_cache[i] = G(1, j, k + 1);
-				left_mul_cache[i] =
-				    g_left_cache[i] * U(1, j - 1, k);
-				right_mul_cache[i] =
-				    g_right_cache[i] * U(1, j + 1, k);
-				in_mul_cache[i] =
-				    g_in_cache[i] * U(1, j, k - 1);
-				out_mul_cache[i] =
-				    g_in_cache[i] * U(1, j, k + 1);
+				stencil_cache[i] = g_left_cache[i] * U(1,j-1,k);
+				stencil_cache[i] += g_right_cache[i] * U(1,j+1,k);
+				stencil_cache[i] += g_in_cache[i] * U(1,j,k-1);
+				stencil_cache[i] += g_out_cache[i] * U(1,j,k+1);
 				cubic_approx_cache[i] =
 				    cubic_approx(U(i, j, k), F(i, j, k),
-						 sigma2);
+						 sigma2) * gamma;
 			}
 			u_stencil_center = U(0, j, k);
 			g_stencil_center = U(0, j, k);
@@ -102,13 +97,7 @@ static inline uint2_t semi_implicit_convergence(double u[M][N][P],
 
 				numer =
 				    u_stencil_center +
-				    dt * (right_mul_cache[i] +
-					  left_mul_cache[i] +
-					  u_stencil_up * g_stencil_up +
-					  u_stencil_down * g_stencil_down +
-					  in_mul_cache[i] +
-					  out_mul_cache[i] -
-					  gamma * cubic_approx_cache[i]);
+				    dt * (stencil_cache[i] + u_stencil_up * g_stencil_up + u_stencil_down * g_stencil_down - cubic_approx_cache[i]);
 				denom =
 				    1.0 + dt * (g_right_cache[i] +
 						g_left_cache[i] +
