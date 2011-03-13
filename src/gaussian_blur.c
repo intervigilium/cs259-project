@@ -10,7 +10,6 @@ void gaussian_blur(double u[M][N][P], double Ksigma)
 	double m_cache[M], n_cache[N], p_cache[P];
 	double r;
 	uint32_t steps, i, j, k, idx;
-	uint32_t plane, col, row;
 
 	for (steps = 0; steps < 3 * GAUSSIAN_NUMSTEPS; steps++) {
 #pragma AP unroll
