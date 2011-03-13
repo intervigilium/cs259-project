@@ -1,6 +1,6 @@
 #include "gaussian_blur.h"
 
-void gaussian_blur(double u[M * N * P], double Ksigma)
+void gaussian_blur(double u[M][N][P], double Ksigma)
 {
 	double lambda = (Ksigma * Ksigma) / (2.0 * GAUSSIAN_NUMSTEPS);
 	double nu =
@@ -19,16 +19,12 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 	}
 
 	for (steps = 0; steps < GAUSSIAN_NUMSTEPS; steps++) {
-		/* all of these loops have data dependencies
-		 * due to u[i][j][k] writebacks */
-		/* move up by one plane, ie k++ */
-
 		/* downward */
-		for (k = 0; k < P * N; k++) {
+		for (k = 0; k < P; k++) {
+			for (j = 0; j < N; j++) {
 #pragma AP pipeline
-			plane = k / N;
-			col = k % N;
-			U(0, col, plane) *= BoundaryScale;
+				U(0, j, k) *= BoundaryScale;
+			}
 		}
 		for (k = 0; k < P; k++) {
 			for (j = 0; j < N; j++) {
@@ -46,11 +42,11 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 		}
 
 		/* upward */
-		for (k = 0; k < P * N; k++) {
+		for (k = 0; k < P; k++) {
+			for (j = 0; j < N; j++) {
 #pragma AP pipeline
-			plane = k / N;
-			col = k % N;
-			U(M - 1, col, plane) *= BoundaryScale;
+				U(M - 1, j, k) *= BoundaryScale;
+			}
 		}
 		for (k = 0; k < P; k++) {
 			for (j = 0; j < N; j++) {
@@ -70,11 +66,11 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 		}
 
 		/* right */
-		for (k = 0; k < P * M; k++) {
+		for (k = 0; k < P; k++) {
+			for (i = 0; i < M; i++) {
 #pragma AP pipeline
-			plane = k / M;
-			row = k % M;
-			U(row, 0, plane) *= BoundaryScale;
+				U(i, 0, k) *= BoundaryScale;
+			}
 		}
 		for (i = 0; i < M; i++) {
 			for (k = 0; k < P; k++) {
@@ -92,11 +88,11 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 		}
 
 		/* left */
-		for (k = 0; k < P * M; k++) {
+		for (k = 0; k < P; k++) {
+			for (i = 0; i < M; i++) {
 #pragma AP pipeline
-			plane = k / M;
-			row = k % M;
-			U(row, N - 1, plane) *= BoundaryScale;
+				U(i, N - 1, k) *= BoundaryScale;
+			}
 		}
 		for (i = 0; i < M; i++) {
 			for (k = 0; k < P; k++) {
@@ -115,11 +111,11 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 		}
 
 		/* out */
-		for (j = 0; j < N * M; j++) {
+		for (j = 0; j < N; j++) {
+			for (i = 0; i < M; i++) {
 #pragma AP pipeline
-			col = j / M;
-			row = j % M;
-			U(row, col, 0) *= BoundaryScale;
+				U(i, j, 0) *= BoundaryScale;
+			}
 		}
 		for (j = 0; j < N; j++) {
 			for (i = 0; i < M; i++) {
@@ -137,11 +133,11 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 		}
 
 		/* in */
-		for (j = 0; j < N * M; j++) {
+		for (j = 0; j < N; j++) {
+			for (i = 0; i < M; i++) {
 #pragma AP pipeline
-			col = j / M;
-			row = j % M;
-			U(row, col, P - 1) *= BoundaryScale;
+				U(i, j, P - 1) *= BoundaryScale;
+			}
 		}
 		for (j = 0; j < N; j++) {
 			for (i = 0; i < M; i++) {
@@ -160,8 +156,12 @@ void gaussian_blur(double u[M * N * P], double Ksigma)
 		}
 	}
 
-	for (i = 0; i < M * N * P; i++) {
+	for (k = 0; k < P; k++) {
+		for (j = 0; j < N; j++) {
+			for (i = 0; i < M; i++) {
 #pragma AP pipeline
-		u[i] *= PostScale;
+				U(i, j, k) *= PostScale;
+			}
+		}
 	}
 }
