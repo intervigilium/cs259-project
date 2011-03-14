@@ -21,7 +21,7 @@
             <customLibs/>
         </UIAutosynConf>
         <UIAutoMGConf AskAgain="false" Export="false" Xil_CoreGen="false" Xil_ISE="false">
-            <UIAutoMGImpl add_io_buffers="false" altera_register_duplication="off" op_effort="high" op_goal="speed" par_effort="high" register_balancing="no" register_duplication="false" register_retiming="off" setup="1" synthesis_combo_logic="off" synthesis_effort="normal" virtual_pins="off">
+            <UIAutoMGImpl add_io_buffers="false" altera_register_duplication="off" op_effort="high" op_goal="speed" par_effort="high" register_balancing="no" register_duplication="false" register_retiming="off" setup="0" synthesis_combo_logic="off" synthesis_effort="normal" virtual_pins="off">
                 <RTLs>
                     <Verilog selection="false" tool="ISE"/>
                     <Vhdl selection="true" tool="ISE"/>
